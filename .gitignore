@@ -22,3 +22,6 @@ Utils/testIRs/*.wav
 
 # Utils: test image source export
 Utils/testOscState/*.txt
+
+# JuceLibraryCode modules
+JuceLibraryCode/modules/*
