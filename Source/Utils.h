@@ -191,20 +191,25 @@ inline File getFileFromString( const String & fileName )
     auto thisDir = File::getSpecialLocation(File::currentExecutableFile).getParentDirectory();
     
     File resourceDir; bool resourceDirDefined = false;
-    if (SystemStats::getOperatingSystemName().startsWithIgnoreCase("Mac"))
+    
+    if (SystemStats::getOperatingSystemName().startsWithIgnoreCase("Linux"))
+    {
+        resourceDir = thisDir.getParentDirectory().getChildFile("data");
+        resourceDirDefined = true;
+    }
+    else if (SystemStats::getOperatingSystemName().startsWithIgnoreCase("Mac"))
     {
         resourceDir = thisDir.getParentDirectory().getChildFile("Resources");
         resourceDirDefined = true;
     }
-    else if (SystemStats::getOperatingSystemName().startsWithIgnoreCase("Win") || SystemStats::getOperatingSystemName().startsWithIgnoreCase("Linux"))
+    else if (SystemStats::getOperatingSystemName().startsWithIgnoreCase("Win"))
     {
         resourceDir = thisDir.getChildFile("data");
         resourceDirDefined = true;
     }
     else
     {
-        AlertWindow::showMessageBoxAsync ( AlertWindow::WarningIcon, "Cannot locate file (OS not supported)", fileName, "OK");
-        DBG(String("Cannot locate file (OS not supported): ") + fileName);
+        AlertWindow::showMessageBoxAsync ( AlertWindow::WarningIcon, "Cannot locate file (OS non supported)", SystemStats::getOperatingSystemName(), "OK");
     }
     
     if (!resourceDirDefined) // skip loading

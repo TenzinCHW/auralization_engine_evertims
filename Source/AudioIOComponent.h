@@ -1,4 +1,5 @@
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <memory>
 
 class AudioIOComponent:
 public Component,
@@ -125,7 +126,7 @@ bool openAudioFile()
 {
     bool fileOpenedSucess = false;
     
-    FileChooser chooser ("Select a Wave file to play...", File::nonexistent, "*.wav");
+    FileChooser chooser ("Select a Wave file to play...", File(), "*.wav");
     
     if (chooser.browseForFileToOpen())
     {
@@ -203,13 +204,13 @@ void saveIR(const AudioBuffer<float> & source, double sampleRate, String fileNam
     
     // Create an OutputStream to write to our destination file...
     file.deleteFile();
-    ScopedPointer<FileOutputStream> fileStream (file.createOutputStream());
+    std::unique_ptr<FileOutputStream> fileStream (file.createOutputStream());
     
     if (fileStream != nullptr)
     {
         // Now create a WAV writer object that writes to our output stream...
         WavAudioFormat wavFormat;
-        AudioFormatWriter* writer = wavFormat.createWriterFor (fileStream, sampleRate, source.getNumChannels(), 24, StringPairArray(), 0);
+        AudioFormatWriter* writer = wavFormat.createWriterFor (fileStream.get(), sampleRate, source.getNumChannels(), 24, StringPairArray(), 0);
         
         if (writer != nullptr)
         {
