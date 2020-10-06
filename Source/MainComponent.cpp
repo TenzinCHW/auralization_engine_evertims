@@ -2,11 +2,15 @@
 #include "MainComponent.h"
 #include "Utils.h"
 
+#include <iostream>
 
 MainContentComponent::MainContentComponent():
 oscHandler(),
 clippingLed( *this ),
 audioIOComponent(),
+
+aDS(),
+
 audioRecorder(),
 delayLine(),
 sourceImagesHandler(),
@@ -23,6 +27,10 @@ ambi2binContainer()
     
     // add audioIOComponent as addAudioCallback for adc input
     deviceManager.addAudioCallback(&audioIOComponent);
+
+    deviceManager.getAudioDeviceSetup(aDS);
+    aDS.bufferSize = 4096;
+    deviceManager.setAudioDeviceSetup(aDS, true);
     
     //==========================================================================
     // INIT GUI ELEMENTS
@@ -240,7 +248,7 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
     if( !isRecordingIr )
     {
         processAmbisonicBuffer( bufferToFill.buffer );
-        if( audioRecorder.isRecording() ){ recordAmbisonicBuffer(); }
+        if( audioRecorder.isRecording() ){ recordAmbisonicBuffer(); }
         fillNextAudioBlock( bufferToFill.buffer );
     }
     // simply clear output buffer

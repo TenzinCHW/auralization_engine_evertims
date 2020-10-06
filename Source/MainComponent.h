@@ -81,6 +81,7 @@ private:
     ToggleButton enableDirectToBinaural;
     ToggleButton enableLog;
     ToggleButton enableRecord;
+    Slider sampleSizeSlider;
     Slider gainReverbTailSlider;
     Slider gainDirectPathSlider;
     Slider gainEarlySlider;
@@ -110,6 +111,8 @@ private:
     
     // audio player (GUI + audio reader + adc input)
     AudioIOComponent audioIOComponent;
+
+    AudioDeviceManager::AudioDeviceSetup aDS;
     
     // audio stream recorder
     AudioRecorder audioRecorder;
